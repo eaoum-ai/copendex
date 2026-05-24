@@ -24,9 +24,17 @@ type Symbol struct {
 }
 
 type Stats struct {
-	FileCount     int64            `json:"fileCount"`
-	SymbolCount   int64            `json:"symbolCount"`
-	LanguageCount int64            `json:"languageCount"`
-	IndexSize     int64            `json:"indexSizeBytes"`
-	Languages     map[string]int64 `json:"languages"`
+	FileCount          int64            `json:"fileCount"`
+	SymbolCount        int64            `json:"symbolCount"`
+	LanguageCount      int64            `json:"languageCount"`
+	IndexSize          int64            `json:"indexSizeBytes"`
+	IndexSchemaVersion int              `json:"indexSchemaVersion"`
+	Languages          map[string]int64 `json:"languages"`
+}
+
+type QueryFilters struct {
+	Kind        string
+	Language    string
+	Path        string
+	PackageName string
 }

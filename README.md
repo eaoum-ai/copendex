@@ -85,6 +85,7 @@ Search symbols:
 ```sh
 ./copendex symbols Service
 ./copendex symbols Service --json
+./copendex symbols Service --kind class --package com.example
 ```
 
 Search files and symbols:
@@ -92,6 +93,7 @@ Search files and symbols:
 ```sh
 ./copendex search AuthorizationService
 ./copendex search AuthorizationService --json
+./copendex search AuthorizationService --language java --path src/main
 ```
 
 Generate the local HTML UI:
