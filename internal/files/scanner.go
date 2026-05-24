@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Package files discovers source files while honoring config and ignore rules.
 package files
 
 import (

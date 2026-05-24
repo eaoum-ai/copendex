@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Package mcp provides the stdio JSON-RPC scaffold for agent integrations.
 package mcp
 
 import (

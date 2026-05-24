@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file ranks and orders file and symbol search results.
 package index
 
 import (
