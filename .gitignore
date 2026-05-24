@@ -1,0 +1,28 @@
+# Local Copendex state
+.copendex/
+
+# Build outputs
+/copendex
+*.exe
+*.test
+*.out
+bin/
+dist/
+build/
+
+# Go caches and coverage
+.cache/
+coverage.out
+coverage.html
+
+# Environment and local config
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
