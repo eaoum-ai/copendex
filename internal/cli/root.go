@@ -64,6 +64,17 @@ func newIndexCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if !rebuild {
+				existing, err := idx.OpenExisting(root)
+				if err == nil {
+					existing.Close()
+					return fmt.Errorf("Copendex index is already built at %s; use --rebuild or -r to force rebuild the index", idx.DBPath(root))
+				}
+				var indexErr idx.IndexError
+				if !errors.As(err, &indexErr) || indexErr.Kind != idx.MissingIndex {
+					return err
+				}
+			}
 			cfg, err := config.Load(root)
 			if err != nil {
 				return err
@@ -108,7 +119,7 @@ func newIndexCommand() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().BoolVar(&rebuild, "rebuild", false, "remove and recreate the local index before indexing")
+	cmd.Flags().BoolVarP(&rebuild, "rebuild", "r", false, "remove and recreate the local index before indexing")
 	return cmd
 }
 

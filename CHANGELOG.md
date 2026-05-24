@@ -10,7 +10,7 @@ This project uses calendar versioning in the `YY.MM.N` format once public versio
 
 - SQLite index schema version metadata, exposed in stats JSON.
 - Clear errors for missing, stale, or incompatible local indexes.
-- `copendex index --rebuild` for explicit local index recreation.
+- `copendex index --rebuild`/`-r` for explicit local index recreation.
 - MCP server scaffold with stdio JSON-RPC initialization.
 - Search filters for kind, language, file path, and package.
 - Initial Go CLI foundation for local-first codebase indexing.

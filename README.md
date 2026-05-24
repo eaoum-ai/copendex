@@ -71,6 +71,8 @@ Index the repository:
 
 ```sh
 ./copendex index
+./copendex index --rebuild
+./copendex index -r
 ```
 
 Show index stats:
