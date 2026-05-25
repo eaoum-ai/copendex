@@ -15,7 +15,6 @@ import (
 	"github.com/eaoum-ai/copendex/internal/files"
 	idx "github.com/eaoum-ai/copendex/internal/index"
 	"github.com/eaoum-ai/copendex/internal/lang/java"
-	"github.com/eaoum-ai/copendex/internal/mcp"
 	"github.com/eaoum-ai/copendex/internal/output"
 	"github.com/eaoum-ai/copendex/internal/search"
 	"github.com/eaoum-ai/copendex/internal/ui"
@@ -27,18 +26,8 @@ func NewRootCommand() *cobra.Command {
 		Use:   "copendex",
 		Short: "Local-first codebase intelligence for coding agents",
 	}
-	cmd.AddCommand(newInitCommand(), newIndexCommand(), newSearchCommand(), newSymbolsCommand(), newStatsCommand(), newUICommand(), newMCPCommand())
+	cmd.AddCommand(newInitCommand(), newIndexCommand(), newSearchCommand(), newSymbolsCommand(), newStatsCommand(), newUICommand())
 	return cmd
-}
-
-func newMCPCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "mcp",
-		Short: "Run the Copendex MCP server over stdio",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return mcp.NewServer().Serve(cmd.InOrStdin(), cmd.OutOrStdout())
-		},
-	}
 }
 
 func newInitCommand() *cobra.Command {
