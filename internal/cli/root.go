@@ -1,6 +1,12 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Package cli wires Copendex commands, flags, and command output.
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -43,13 +49,25 @@ func newInitCommand() *cobra.Command {
 }
 
 func newIndexCommand() *cobra.Command {
-	return &cobra.Command{
+	var rebuild bool
+	cmd := &cobra.Command{
 		Use:   "index",
 		Short: "Index the current repository",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			root, err := os.Getwd()
 			if err != nil {
 				return err
+			}
+			if !rebuild {
+				existing, err := idx.OpenExisting(root)
+				if err == nil {
+					existing.Close()
+					return fmt.Errorf("Copendex index is already built at %s; use --rebuild or -r to force rebuild the index", idx.DBPath(root))
+				}
+				var indexErr idx.IndexError
+				if !errors.As(err, &indexErr) || indexErr.Kind != idx.MissingIndex {
+					return err
+				}
 			}
 			cfg, err := config.Load(root)
 			if err != nil {
@@ -74,6 +92,11 @@ func newIndexCommand() *cobra.Command {
 				}
 				symbolsByPath[file.Path] = java.Extract(file.Path, content)
 			}
+			if rebuild {
+				if err := os.Remove(idx.DBPath(root)); err != nil && !errors.Is(err, os.ErrNotExist) {
+					return err
+				}
+			}
 			store, err := idx.Open(root)
 			if err != nil {
 				return err
@@ -90,10 +113,13 @@ func newIndexCommand() *cobra.Command {
 			return nil
 		},
 	}
+	cmd.Flags().BoolVarP(&rebuild, "rebuild", "r", false, "remove and recreate the local index before indexing")
+	return cmd
 }
 
 func newSearchCommand() *cobra.Command {
 	var jsonOut bool
+	var filters idx.QueryFilters
 	cmd := &cobra.Command{
 		Use:   "search <query>",
 		Short: "Search indexed files and symbols",
@@ -104,7 +130,7 @@ func newSearchCommand() *cobra.Command {
 				return err
 			}
 			defer store.Close()
-			results, err := search.New(store).All(args[0])
+			results, err := search.New(store).AllFiltered(args[0], filters)
 			if err != nil {
 				return err
 			}
@@ -123,11 +149,13 @@ func newSearchCommand() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&jsonOut, "json", false, "write structured JSON output")
+	addQueryFilterFlags(cmd, &filters)
 	return cmd
 }
 
 func newSymbolsCommand() *cobra.Command {
 	var jsonOut bool
+	var filters idx.QueryFilters
 	cmd := &cobra.Command{
 		Use:   "symbols <query>",
 		Short: "Search indexed symbols",
@@ -138,7 +166,7 @@ func newSymbolsCommand() *cobra.Command {
 				return err
 			}
 			defer store.Close()
-			symbols, err := search.New(store).Symbols(args[0])
+			symbols, err := search.New(store).SymbolsFiltered(args[0], filters)
 			if err != nil {
 				return err
 			}
@@ -153,7 +181,15 @@ func newSymbolsCommand() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&jsonOut, "json", false, "write structured JSON output")
+	addQueryFilterFlags(cmd, &filters)
 	return cmd
+}
+
+func addQueryFilterFlags(cmd *cobra.Command, filters *idx.QueryFilters) {
+	cmd.Flags().StringVar(&filters.Kind, "kind", "", "filter symbols by kind")
+	cmd.Flags().StringVar(&filters.Language, "language", "", "filter by language")
+	cmd.Flags().StringVar(&filters.Path, "path", "", "filter by file path substring")
+	cmd.Flags().StringVar(&filters.PackageName, "package", "", "filter symbols by package substring")
 }
 
 func newStatsCommand() *cobra.Command {
@@ -222,5 +258,5 @@ func openStore() (*idx.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	return idx.Open(root)
+	return idx.OpenExisting(root)
 }

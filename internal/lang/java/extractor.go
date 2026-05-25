@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Package java extracts lightweight Java symbols for the local index.
 package java
 
 import (

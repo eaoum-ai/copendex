@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// This file verifies repository file discovery and ignore handling.
 package files
 
 import (

@@ -1,3 +1,8 @@
+// Copyright 2026 Eaoum AI
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Package config loads and writes per-repository Copendex configuration.
 package config
 
 import (

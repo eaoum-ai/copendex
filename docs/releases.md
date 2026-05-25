@@ -73,6 +73,12 @@ The tag should point to a commit on `main`.
 
 User-visible changes should be recorded in [CHANGELOG.md](../CHANGELOG.md) under `Unreleased`.
 
+Do not date individual changelog bullets. Keep unreleased work grouped under `Unreleased`, then move those bullets into a dated release heading when the release is cut:
+
+```md
+## 26.06.0 - 2026-06-12
+```
+
 Use these sections when applicable:
 
 - `Added`
@@ -104,7 +110,7 @@ At release time:
 5. Create a signed release commit if needed:
 
    ```sh
-   git commit -s -m "Prepare v26.05.0 release"
+   git cs -m "Prepare v26.05.0 release"
    ```
 
 6. Create and push the tag:

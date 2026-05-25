@@ -6,10 +6,28 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
 
 - Keep the Go CLI foundation small, reliable, and easy to build.
 - Improve deterministic repository scanning and indexing.
-- Keep JSON output stable enough for coding agents to consume.
+- Make Java indexing useful on real repositories before adding an MCP layer.
+- Keep JSON output stable enough for coding agents to consume through the CLI.
 - Document compatibility expectations before expanding agent integrations.
 
 ## Near Term
+
+- Finish index lifecycle behavior.
+  - Add index schema version metadata and compatibility checks.
+  - Add explicit rebuild guidance for missing, stale, or incompatible indexes.
+  - Require `copendex index --rebuild` or `-r` before overwriting an existing compatible index.
+- Improve Java symbol extraction while keeping the extractor replaceable.
+  - Cover constructors, nested classes, annotations, interfaces, enums, enum constants, and overloaded methods.
+  - Add realistic Java fixtures for common application code shapes.
+- Improve CLI search usefulness.
+  - Keep filters for kind, language, file path, and package.
+  - Add stable ranking behavior and document matching semantics.
+  - Consider exact-match and result-limit flags once ranking is settled.
+- Document the CLI JSON contract for `stats`, `symbols`, and `search`.
+- Add a real-repository smoke test checklist for init, index, stats, search, and rebuild.
+- Add troubleshooting for `.gitignore`, include/exclude config, SQLite, and rebuild behavior.
+
+## After MVP
 
 - Move generated project indexes and UI output to a shared local Copendex home while keeping per-repository config in `.copendex/config.yaml`.
   - Store generated indexes under `~/.copendex/projects/<project-id>/`.
@@ -17,10 +35,7 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
   - Let users choose the indexed project from the shared static UI.
   - Keep the UI static-only; do not introduce a local server for normal UI usage.
   - Preserve a low CPU and memory footprint by generating data ahead of time and avoiding background processes.
-- Add index schema version metadata and compatibility checks.
-- Improve Java symbol extraction while keeping the extractor replaceable.
-- Add richer search filters for kind, language, file path, and package.
-- Add an MCP server as a stable agent-facing compatibility layer.
+- Add an MCP server as a stable agent-facing compatibility layer after the CLI, index, search, and JSON contracts are useful on real Java repositories.
 - Add release automation for Linux, macOS, and Windows binaries.
   - Keep local development builds as ignored artifacts such as `./copendex` or `dist/copendex`.
   - Install packaged binaries through system paths managed by the package manager, such as Homebrew or Snap.

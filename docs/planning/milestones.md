@@ -19,16 +19,22 @@ Initial OSS foundation.
 
 ## 26.06.0
 
-Compatibility and agent-facing contract improvements.
+MVP CLI, index, and search functionality.
 
 - Index schema version metadata.
 - Explicit rebuild guidance for incompatible local indexes.
 - Better structured errors for missing or stale indexes.
-- MCP server scaffold for local agent integrations.
-- Initial MCP schema compatibility policy.
+- `copendex index --rebuild` and `-r` for explicit local index recreation.
+- Better Java extraction coverage for constructors, nested classes, annotations, interfaces, enums, enum constants, and overloaded methods.
+- Search filters and documented matching/ranking behavior.
+- JSON output contract examples for `stats`, `symbols`, and `search`.
+- Real Java repository smoke test checklist.
+- Troubleshooting documentation for `.gitignore`, config, SQLite, and rebuild behavior.
 
 ## Future
 
+- MCP server scaffold for local agent integrations.
+- Initial MCP schema compatibility policy.
 - More complete Java extraction.
 - Additional languages.
 - Incremental indexing.

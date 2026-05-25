@@ -4,19 +4,28 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 
 ## Next
 
-- [ ] Add index schema version metadata to SQLite.
-- [ ] Add clear errors for missing, stale, or incompatible indexes.
-- [ ] Add `copendex index --rebuild` as an explicit rebuild command.
-- [ ] Add MCP server scaffold after the CLI foundation remains stable.
-- [ ] Add richer query filters for symbols and search.
+- [x] Add index schema version metadata to SQLite.
+- [x] Add clear errors for missing, stale, or incompatible indexes.
+- [x] Add `copendex index --rebuild` as an explicit rebuild command.
+- [x] Add richer query filters for symbols and search.
+- [ ] Improve Java method extraction coverage.
+- [ ] Add tests for nested classes, annotations, constructors, interfaces, enums, and enum constants.
+- [ ] Document JSON output contracts for `stats`, `symbols`, and `search`.
+- [ ] Add real Java repository smoke test checklist.
+- [ ] Add troubleshooting for `.gitignore`, config, SQLite, and rebuild behavior.
+- [ ] Document search matching and ranking semantics.
+- [ ] Add exact-match and result-limit search options.
 
 ## Parser And Indexing
 
-- [ ] Improve Java method extraction coverage.
-- [ ] Add tests for nested classes, annotations, constructors, and enums.
 - [ ] Add reference and relationship tables.
 - [ ] Add incremental indexing.
 - [ ] Evaluate parser replacement options for Java.
+
+## Agent Integrations
+
+- [ ] Add MCP server scaffold after the CLI foundation is functional on real Java repositories.
+- [ ] Add initial MCP schema compatibility policy.
 
 ## Distribution
 
