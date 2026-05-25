@@ -4,6 +4,8 @@ All notable changes to Copendex will be documented in this file.
 
 This project uses calendar versioning in the `YY.MM.N` format once public versioned releases begin.
 
+Changes stay under `Unreleased` until a release is cut. At release time, entries move into a dated version section such as `## 26.06.0 - 2026-06-12`.
+
 ## Unreleased
 
 ### Added
