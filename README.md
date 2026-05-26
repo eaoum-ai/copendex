@@ -26,7 +26,7 @@ Copendex does not send source code to a cloud service. It does not use embedding
 
 Requirements:
 
-- Go 1.20 or newer
+- Go 1.22 or newer
 
 Install dependencies and run tests:
 
