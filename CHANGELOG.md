@@ -10,6 +10,7 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 
 ### Added
 
+- Makefile install and uninstall targets for putting `copendex` on `PATH`.
 - SQLite index schema version metadata, exposed in stats JSON.
 - Clear errors for missing, stale, or incompatible local indexes.
 - `copendex index --rebuild`/`-r` for explicit local index recreation.

@@ -53,12 +53,30 @@ Or:
 make build
 ```
 
+Install the CLI so `copendex` is available from any directory:
+
+```sh
+make install
+```
+
+By default this installs to `$(go env GOPATH)/bin/copendex`. Ensure that directory is on your `PATH`, or choose a different install directory:
+
+```sh
+make install BINDIR=/usr/local/bin
+```
+
+Remove an installed local binary:
+
+```sh
+make uninstall
+```
+
 ## CLI Usage
 
 Initialize Copendex in a repository:
 
 ```sh
-./copendex init
+copendex init
 ```
 
 This creates:
@@ -70,38 +88,38 @@ This creates:
 Index the repository:
 
 ```sh
-./copendex index
-./copendex index --rebuild
-./copendex index -r
+copendex index
+copendex index --rebuild
+copendex index -r
 ```
 
 Show index stats:
 
 ```sh
-./copendex stats
-./copendex stats --json
+copendex stats
+copendex stats --json
 ```
 
 Search symbols:
 
 ```sh
-./copendex symbols Service
-./copendex symbols Service --json
-./copendex symbols Service --kind class --package com.example
+copendex symbols Service
+copendex symbols Service --json
+copendex symbols Service --kind class --package com.example
 ```
 
 Search files and symbols:
 
 ```sh
-./copendex search AuthorizationService
-./copendex search AuthorizationService --json
-./copendex search AuthorizationService --language java --path src/main
+copendex search AuthorizationService
+copendex search AuthorizationService --json
+copendex search AuthorizationService --language java --path src/main
 ```
 
 Generate the local HTML UI:
 
 ```sh
-./copendex ui
+copendex ui
 ```
 
 Then open the generated file:
@@ -110,7 +128,7 @@ Then open the generated file:
 .copendex/ui/index.html
 ```
 
-The UI is a static HTML snapshot with embedded index data from `./copendex index`. It does not start a server.
+The UI is a static HTML snapshot with embedded index data from `copendex index`. It does not start a server.
 
 ## Default Config
 
