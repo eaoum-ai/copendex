@@ -1,10 +1,10 @@
 module github.com/eaoum-ai/copendex
 
-go 1.22
+go 1.26
 
 require (
 	github.com/spf13/cobra v1.8.1
-	github.com/tree-sitter/go-tree-sitter v0.24.0
+	github.com/tree-sitter/go-tree-sitter v0.25.0
 	github.com/tree-sitter/tree-sitter-java v0.23.5
 	modernc.org/sqlite v1.23.1
 )

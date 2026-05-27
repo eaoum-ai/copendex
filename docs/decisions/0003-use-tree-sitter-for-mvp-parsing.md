@@ -35,7 +35,7 @@ Do not add semantic resolution in this decision. References, relationships, inhe
 
 - Java extraction should become more accurate and credible for real repositories.
 - Tree-sitter creates a path for adding other languages through grammar-specific extractors.
-- Copendex now requires Go 1.22 or newer for development and CI.
+- Copendex now requires Go 1.26 or newer for development and CI.
 - Parser dependencies and cross-platform release behavior need explicit validation.
 - The selected Go bindings are CGO-backed; `CGO_ENABLED=0` builds are not expected to work while this parser path is active.
 - The CLI and index layers should remain parser-agnostic so Tree-sitter can be upgraded, replaced, or supplemented without changing user-facing contracts.
