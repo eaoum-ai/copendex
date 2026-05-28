@@ -69,6 +69,8 @@ Rules:
 
 Real repository smoke tests prove Cosha works on full Java projects without committing those projects.
 
+Use [java-test-repositories.md](java-test-repositories.md) for the repository progression, practical query cases, benchmark commands, and report template.
+
 Near-term target command:
 
 ```sh

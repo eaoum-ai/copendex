@@ -14,6 +14,7 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 - [ ] Add real Java repository smoke test checklist.
 - [ ] Add `make integration` for compiled CLI tests against generated temporary Java repositories.
 - [ ] Add optional `make smoke` using a gitignored `COSHA_SMOKE_REPO` path for real Java repository validation.
+- [ ] Add benchmark/report automation for Java smoke repositories using `hyperfine`.
 - [ ] Add troubleshooting for `.gitignore`, config, SQLite, and rebuild behavior.
 - [ ] Document search matching and ranking semantics.
 - [ ] Add exact-match and result-limit search options.
