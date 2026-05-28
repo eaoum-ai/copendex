@@ -7,6 +7,7 @@ Cosha keeps lightweight project management in text files so planning stays revie
 - [../roadmap.md](../roadmap.md): high-level direction and non-goals.
 - [backlog.md](backlog.md): lightweight task inventory.
 - [milestones.md](milestones.md): release-oriented planning.
+- [../distribution](../distribution): package manager publishing notes.
 - [../../CHANGELOG.md](../../CHANGELOG.md): user-visible changes by release.
 - [../decisions](../decisions): architecture decision records.
 
