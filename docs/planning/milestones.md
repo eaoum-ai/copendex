@@ -29,6 +29,7 @@ MVP CLI, index, and search functionality.
 - Search filters and documented matching/ranking behavior.
 - JSON output contract examples for `stats`, `symbols`, and `search`.
 - Real Java repository smoke test checklist.
+- Compiled CLI integration test command for generated temporary Java repositories.
 - Troubleshooting documentation for `.gitignore`, config, SQLite, and rebuild behavior.
 
 ## 26.07.0
