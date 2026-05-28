@@ -1,6 +1,6 @@
 # Milestones
 
-Copendex uses `YY.MM.N` release versions. Milestones are planning targets and may change as scope becomes clearer.
+Cosha uses `YY.MM.N` release versions. Milestones are planning targets and may change as scope becomes clearer.
 
 ## 26.05.0
 
@@ -24,7 +24,7 @@ MVP CLI, index, and search functionality.
 - Index schema version metadata.
 - Explicit rebuild guidance for incompatible local indexes.
 - Better structured errors for missing or stale indexes.
-- `copendex index --rebuild` and `-r` for explicit local index recreation.
+- `cosha index --rebuild` and `-r` for explicit local index recreation.
 - Better Java extraction coverage for constructors, nested classes, annotations, interfaces, enums, enum constants, and overloaded methods.
 - Search filters and documented matching/ranking behavior.
 - JSON output contract examples for `stats`, `symbols`, and `search`.

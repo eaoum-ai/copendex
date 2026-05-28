@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/eaoum-ai/copendex/internal/config"
+	"github.com/eaoum-ai/cosha/internal/config"
 )
 
 func TestScannerMatchesNestedJavaAndIgnoresGitignore(t *testing.T) {

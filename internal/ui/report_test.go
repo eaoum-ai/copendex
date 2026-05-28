@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/eaoum-ai/copendex/internal/index"
+	"github.com/eaoum-ai/cosha/internal/index"
 )
 
 func TestWriteReportEmbedsIndexData(t *testing.T) {
@@ -52,7 +52,7 @@ func TestWriteReportEmbedsIndexData(t *testing.T) {
 		t.Fatal(err)
 	}
 	html := string(content)
-	if strings.Contains(html, "__COPENDEX_DATA__") {
+	if strings.Contains(html, "__COSHA_DATA__") {
 		t.Fatal("report still contains placeholder")
 	}
 	if !strings.Contains(html, "AuthorizationService") {

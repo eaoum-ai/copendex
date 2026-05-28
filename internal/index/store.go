@@ -43,18 +43,18 @@ type IndexError struct {
 func (e IndexError) Error() string {
 	switch e.Kind {
 	case MissingIndex:
-		return fmt.Sprintf("missing Copendex index at %s; run `copendex index`", e.Path)
+		return fmt.Sprintf("missing Cosha index at %s; run `cosha index`", e.Path)
 	case StaleIndex:
-		return fmt.Sprintf("stale Copendex index at %s: missing schema version metadata; run `copendex index --rebuild`", e.Path)
+		return fmt.Sprintf("stale Cosha index at %s: missing schema version metadata; run `cosha index --rebuild`", e.Path)
 	case IncompatibleIndex:
-		return fmt.Sprintf("incompatible Copendex index at %s: schema version %d, expected %d; run `copendex index --rebuild`", e.Path, e.Version, CurrentSchemaVersion)
+		return fmt.Sprintf("incompatible Cosha index at %s: schema version %d, expected %d; run `cosha index --rebuild`", e.Path, e.Version, CurrentSchemaVersion)
 	default:
-		return fmt.Sprintf("invalid Copendex index at %s", e.Path)
+		return fmt.Sprintf("invalid Cosha index at %s", e.Path)
 	}
 }
 
 func DBPath(root string) string {
-	return filepath.Join(root, ".copendex", "index", "copendex.db")
+	return filepath.Join(root, ".cosha", "index", "cosha.db")
 }
 
 func Open(root string) (*Store, error) {

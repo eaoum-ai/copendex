@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	idx "github.com/eaoum-ai/copendex/internal/index"
+	idx "github.com/eaoum-ai/cosha/internal/index"
 )
 
 func TestSearchSymbolsAndFiles(t *testing.T) {

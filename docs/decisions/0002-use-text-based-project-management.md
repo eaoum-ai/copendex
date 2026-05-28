@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Copendex is an OSS project with a small early scope. The project needs visible planning without introducing a heavyweight external project management dependency.
+Cosha is an OSS project with a small early scope. The project needs visible planning without introducing a heavyweight external project management dependency.
 
 ## Decision
 

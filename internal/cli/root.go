@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-// Package cli wires Copendex commands, flags, and command output.
+// Package cli wires Cosha commands, flags, and command output.
 package cli
 
 import (
@@ -11,20 +11,20 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/eaoum-ai/copendex/internal/config"
-	"github.com/eaoum-ai/copendex/internal/detect"
-	"github.com/eaoum-ai/copendex/internal/files"
-	idx "github.com/eaoum-ai/copendex/internal/index"
-	"github.com/eaoum-ai/copendex/internal/lang/java"
-	"github.com/eaoum-ai/copendex/internal/output"
-	"github.com/eaoum-ai/copendex/internal/search"
-	"github.com/eaoum-ai/copendex/internal/ui"
+	"github.com/eaoum-ai/cosha/internal/config"
+	"github.com/eaoum-ai/cosha/internal/detect"
+	"github.com/eaoum-ai/cosha/internal/files"
+	idx "github.com/eaoum-ai/cosha/internal/index"
+	"github.com/eaoum-ai/cosha/internal/lang/java"
+	"github.com/eaoum-ai/cosha/internal/output"
+	"github.com/eaoum-ai/cosha/internal/search"
+	"github.com/eaoum-ai/cosha/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func NewRootCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "copendex",
+		Use:   "cosha",
 		Short: "Local-first codebase intelligence for coding agents",
 	}
 	cmd.AddCommand(newInitCommand(), newDetectCommand(), newIndexCommand(), newSearchCommand(), newSymbolsCommand(), newStatsCommand(), newUICommand())
@@ -34,7 +34,7 @@ func NewRootCommand() *cobra.Command {
 func newInitCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "init",
-		Short: "Initialize Copendex in the current repository",
+		Short: "Initialize Cosha in the current repository",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			root, err := os.Getwd()
 			if err != nil {
@@ -63,7 +63,7 @@ func newIndexCommand() *cobra.Command {
 				existing, err := idx.OpenExisting(root)
 				if err == nil {
 					existing.Close()
-					return fmt.Errorf("Copendex index is already built at %s; use --rebuild or -r to force rebuild the index", idx.DBPath(root))
+					return fmt.Errorf("Cosha index is already built at %s; use --rebuild or -r to force rebuild the index", idx.DBPath(root))
 				}
 				var indexErr idx.IndexError
 				if !errors.As(err, &indexErr) || indexErr.Kind != idx.MissingIndex {
@@ -83,7 +83,7 @@ func newIndexCommand() *cobra.Command {
 				return err
 			}
 			if len(discovered) == 0 {
-				fmt.Fprintln(cmd.OutOrStdout(), "No Java source files found for the current Copendex config")
+				fmt.Fprintln(cmd.OutOrStdout(), "No Java source files found for the current Cosha config")
 			}
 			symbolsByPath := map[string][]idx.Symbol{}
 			for _, file := range discovered {
@@ -270,7 +270,7 @@ func newUICommand() *cobra.Command {
 	var out string
 	cmd := &cobra.Command{
 		Use:   "ui",
-		Short: "Generate a static HTML UI for the current Copendex index",
+		Short: "Generate a static HTML UI for the current Cosha index",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			root, err := os.Getwd()
 			if err != nil {
@@ -288,7 +288,7 @@ func newUICommand() *cobra.Command {
 			if err := ui.WriteReport(store, outPath); err != nil {
 				return err
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Wrote Copendex UI to %s\n", outPath)
+			fmt.Fprintf(cmd.OutOrStdout(), "Wrote Cosha UI to %s\n", outPath)
 			return nil
 		},
 	}

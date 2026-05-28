@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/eaoum-ai/copendex/internal/config"
+	"github.com/eaoum-ai/cosha/internal/config"
 )
 
 func TestIndexReportsExistingIndexWithoutRebuild(t *testing.T) {

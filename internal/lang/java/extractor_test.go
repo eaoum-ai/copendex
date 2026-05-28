@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/eaoum-ai/copendex/internal/index"
+	"github.com/eaoum-ai/cosha/internal/index"
 )
 
 func TestExtractJavaSymbols(t *testing.T) {

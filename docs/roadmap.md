@@ -15,7 +15,7 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
 - Finish index lifecycle behavior.
   - Add index schema version metadata and compatibility checks.
   - Add explicit rebuild guidance for missing, stale, or incompatible indexes.
-  - Require `copendex index --rebuild` or `-r` before overwriting an existing compatible index.
+  - Require `cosha index --rebuild` or `-r` before overwriting an existing compatible index.
 - Improve Java symbol extraction while keeping the extractor replaceable.
   - Cover constructors, nested classes, annotations, interfaces, enums, enum constants, and overloaded methods.
   - Add realistic Java fixtures for common application code shapes.
@@ -30,17 +30,17 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
 
 ## After MVP
 
-- Move generated project indexes and UI output to a shared local Copendex home while keeping per-repository config in `.copendex/config.yaml`.
-  - Store generated indexes under `~/.copendex/projects/<project-id>/`.
-  - Generate one shared static UI under `~/.copendex/ui/`.
+- Move generated project indexes and UI output to a shared local Cosha home while keeping per-repository config in `.cosha/config.yaml`.
+  - Store generated indexes under `~/.cosha/projects/<project-id>/`.
+  - Generate one shared static UI under `~/.cosha/ui/`.
   - Let users choose the indexed project from the shared static UI.
   - Keep the UI static-only; do not introduce a local server for normal UI usage.
   - Preserve a low CPU and memory footprint by generating data ahead of time and avoiding background processes.
 - Add an MCP server as a stable agent-facing compatibility layer after the CLI, index, search, and JSON contracts are useful on real Java repositories.
 - Add release automation for Linux, macOS, and Windows binaries.
-  - Keep local development builds as ignored artifacts such as `./copendex` or `dist/copendex`.
+  - Keep local development builds as ignored artifacts such as `./cosha` or `dist/cosha`.
   - Install packaged binaries through system paths managed by the package manager, such as Homebrew or Snap.
-  - Keep `~/.copendex/` for runtime data only, not installed binaries.
+  - Keep `~/.cosha/` for runtime data only, not installed binaries.
   - Support future Homebrew, Snap, and manual install flows without changing project config locations.
 
 ## Later
@@ -53,7 +53,7 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
 ## Non-Goals For Now
 
 - No SaaS or cloud service.
-- No LLM dependency inside Copendex.
+- No LLM dependency inside Cosha.
 - No embeddings in v0.
 - No browser application beyond generated static local reports.
 - No always-on background daemon or local UI server.

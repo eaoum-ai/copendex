@@ -1,6 +1,6 @@
 # Text-Based Project Management
 
-Copendex keeps lightweight project management in text files so planning stays reviewable, searchable, and versioned with the code.
+Cosha keeps lightweight project management in text files so planning stays reviewable, searchable, and versioned with the code.
 
 ## Files
 

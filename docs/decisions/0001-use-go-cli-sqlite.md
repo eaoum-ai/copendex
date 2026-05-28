@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Copendex should be local-first, deterministic-first, cross-platform, and easy for coding agents to call. The v0 foundation should avoid cloud services, LLM dependencies, embeddings, and complex runtime requirements.
+Cosha should be local-first, deterministic-first, cross-platform, and easy for coding agents to call. The v0 foundation should avoid cloud services, LLM dependencies, embeddings, and complex runtime requirements.
 
 ## Decision
 
@@ -16,7 +16,7 @@ Prefer `modernc.org/sqlite` over CGO-based SQLite to keep cross-platform builds 
 
 ## Consequences
 
-- Copendex can be distributed as a single binary.
+- Cosha can be distributed as a single binary.
 - The CLI can expose text and JSON output without requiring a service process.
 - SQLite gives the index a durable local storage layer.
 - Parser integrations should be chosen carefully so they do not undermine simple cross-platform builds.
