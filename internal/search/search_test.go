@@ -89,6 +89,12 @@ func TestSearchFilters(t *testing.T) {
 		SizeBytes:    456,
 		LastModified: time.Now(),
 		Hash:         "def",
+	}, {
+		Path:         "src/main/java/com/example/AuthorizationRepository.java",
+		Language:     "java",
+		SizeBytes:    789,
+		LastModified: time.Now(),
+		Hash:         "ghi",
 	}}
 	symbols := map[string][]idx.Symbol{
 		files[0].Path: {{
@@ -106,6 +112,14 @@ func TestSearchFilters(t *testing.T) {
 			File:        files[1].Path,
 			PackageName: "com.example.test",
 			Line:        9,
+		}},
+		files[2].Path: {{
+			Name:        "AuthorizationRepository",
+			Kind:        "interface",
+			Language:    "java",
+			File:        files[2].Path,
+			PackageName: "com.example",
+			Line:        7,
 		}},
 	}
 	if err := store.Rebuild(files, symbols); err != nil {
@@ -127,5 +141,21 @@ func TestSearchFilters(t *testing.T) {
 	}
 	if len(results) != 1 || results[0].Type != "symbol" {
 		t.Fatalf("filtered results = %#v, want one symbol result", results)
+	}
+
+	syms, err = service.SymbolsFiltered("Authorization", idx.QueryFilters{Kind: "class, interface"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(syms) != 3 {
+		t.Fatalf("multi-kind symbols = %#v, want class and interface symbols", syms)
+	}
+
+	results, err = service.AllFiltered("Authorization", idx.QueryFilters{Kind: "class,interface", Path: "src/main"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(results) != 2 {
+		t.Fatalf("multi-kind results = %#v, want class and interface symbols from main package", results)
 	}
 }

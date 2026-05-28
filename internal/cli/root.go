@@ -229,7 +229,7 @@ func newSymbolsCommand() *cobra.Command {
 }
 
 func addQueryFilterFlags(cmd *cobra.Command, filters *idx.QueryFilters) {
-	cmd.Flags().StringVar(&filters.Kind, "kind", "", "filter symbols by kind")
+	cmd.Flags().StringVar(&filters.Kind, "kind", "", "filter symbols by kind, or comma-separated kinds")
 	cmd.Flags().StringVar(&filters.Language, "language", "", "filter by language")
 	cmd.Flags().StringVar(&filters.Path, "path", "", "filter by file path substring")
 	cmd.Flags().StringVar(&filters.PackageName, "package", "", "filter symbols by package substring")
