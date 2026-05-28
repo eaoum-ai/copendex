@@ -43,7 +43,7 @@ Rules:
 
 Integration tests should exercise the compiled CLI as a user would.
 
-Near-term target command:
+Current command:
 
 ```sh
 make integration
@@ -121,12 +121,10 @@ Notes:
 Required for every pull request:
 
 - DCO check.
-- Go tests on Linux.
-- Build check through `make check` once CI is aligned with the Makefile.
+- `make check` on Linux.
 
 Planned required checks:
 
-- Integration test job.
 - macOS test/build job.
 - Windows test/build job.
 - JSON contract check for `stats`, `search`, and `symbols`.
@@ -144,6 +142,7 @@ Current:
 
 ```sh
 make test
+make integration
 make build
 make check
 ```
@@ -151,7 +150,6 @@ make check
 Planned:
 
 ```sh
-make integration
 make smoke
 make ci
 ```
