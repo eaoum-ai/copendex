@@ -23,6 +23,7 @@ This roadmap captures direction, not a fixed delivery promise. Detailed task tra
   - Keep filters for kind, language, file path, and package.
   - Add stable ranking behavior and document matching semantics.
   - Consider exact-match and result-limit flags once ranking is settled.
+  - Consider an `--expand` flag that returns filtered matches first, followed by related results outside the requested kind or filters.
 - Document the CLI JSON contract for `stats`, `symbols`, and `search`.
 - Add a real-repository smoke test checklist for init, index, stats, search, and rebuild.
 - Add troubleshooting for `.gitignore`, include/exclude config, SQLite, and rebuild behavior.
