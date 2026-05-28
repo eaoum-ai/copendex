@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	"github.com/eaoum-ai/copendex/internal/config"
+	"github.com/eaoum-ai/copendex/internal/detect"
 	"github.com/eaoum-ai/copendex/internal/files"
 	idx "github.com/eaoum-ai/copendex/internal/index"
 	"github.com/eaoum-ai/copendex/internal/lang/java"
@@ -26,7 +27,7 @@ func NewRootCommand() *cobra.Command {
 		Use:   "copendex",
 		Short: "Local-first codebase intelligence for coding agents",
 	}
-	cmd.AddCommand(newInitCommand(), newIndexCommand(), newSearchCommand(), newSymbolsCommand(), newStatsCommand(), newUICommand())
+	cmd.AddCommand(newInitCommand(), newDetectCommand(), newIndexCommand(), newSearchCommand(), newSymbolsCommand(), newStatsCommand(), newUICommand())
 	return cmd
 }
 
@@ -81,6 +82,9 @@ func newIndexCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if len(discovered) == 0 {
+				fmt.Fprintln(cmd.OutOrStdout(), "No Java source files found for the current Copendex config")
+			}
 			symbolsByPath := map[string][]idx.Symbol{}
 			for _, file := range discovered {
 				if file.Language != "java" {
@@ -114,6 +118,45 @@ func newIndexCommand() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVarP(&rebuild, "rebuild", "r", false, "remove and recreate the local index before indexing")
+	return cmd
+}
+
+func newDetectCommand() *cobra.Command {
+	var jsonOut bool
+	cmd := &cobra.Command{
+		Use:   "detect",
+		Short: "Detect repository languages and Java project markers",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			root, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			cfg, err := config.Load(root)
+			if err != nil {
+				return err
+			}
+			result, err := detect.RepositoryType(root, cfg)
+			if err != nil {
+				return err
+			}
+			if jsonOut {
+				return output.JSON(cmd.OutOrStdout(), result)
+			}
+			lines := []string{
+				fmt.Sprintf("Java repository: %t", result.IsJavaRepository),
+				fmt.Sprintf("Contains Java source: %t", result.ContainsJavaCode),
+				fmt.Sprintf("Java source files: %d", result.JavaFileCount),
+			}
+			if len(result.JavaProjectFiles) > 0 {
+				lines = append(lines, "Java project files:")
+				for _, path := range result.JavaProjectFiles {
+					lines = append(lines, fmt.Sprintf("  %s", path))
+				}
+			}
+			return output.Lines(cmd.OutOrStdout(), lines)
+		},
+	}
+	cmd.Flags().BoolVar(&jsonOut, "json", false, "write structured JSON output")
 	return cmd
 }
 
@@ -186,7 +229,7 @@ func newSymbolsCommand() *cobra.Command {
 }
 
 func addQueryFilterFlags(cmd *cobra.Command, filters *idx.QueryFilters) {
-	cmd.Flags().StringVar(&filters.Kind, "kind", "", "filter symbols by kind")
+	cmd.Flags().StringVar(&filters.Kind, "kind", "", "filter symbols by kind, or comma-separated kinds")
 	cmd.Flags().StringVar(&filters.Language, "language", "", "filter by language")
 	cmd.Flags().StringVar(&filters.Path, "path", "", "filter by file path substring")
 	cmd.Flags().StringVar(&filters.PackageName, "package", "", "filter symbols by package substring")

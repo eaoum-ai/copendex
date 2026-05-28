@@ -332,8 +332,16 @@ func (s *Store) queryFiles(query string, filters QueryFilters) (*sql.Rows, error
 
 func appendFilters(sqlQuery string, args []any, filters QueryFilters, symbols bool) (string, []any) {
 	if filters.Kind != "" && symbols {
-		sqlQuery += " AND lower(symbols.kind) = lower(?)"
-		args = append(args, filters.Kind)
+		kinds := splitFilterValues(filters.Kind)
+		if len(kinds) == 1 {
+			sqlQuery += " AND lower(symbols.kind) = lower(?)"
+			args = append(args, kinds[0])
+		} else if len(kinds) > 1 {
+			sqlQuery += " AND lower(symbols.kind) IN (" + placeholders(len(kinds)) + ")"
+			for _, kind := range kinds {
+				args = append(args, strings.ToLower(kind))
+			}
+		}
 	}
 	if filters.Language != "" {
 		if symbols {
@@ -352,6 +360,25 @@ func appendFilters(sqlQuery string, args []any, filters QueryFilters, symbols bo
 		args = append(args, filters.PackageName)
 	}
 	return sqlQuery, args
+}
+
+func splitFilterValues(value string) []string {
+	var out []string
+	for _, part := range strings.Split(value, ",") {
+		part = strings.TrimSpace(part)
+		if part != "" {
+			out = append(out, part)
+		}
+	}
+	return out
+}
+
+func placeholders(count int) string {
+	values := make([]string, count)
+	for i := range values {
+		values[i] = "?"
+	}
+	return strings.Join(values, ", ")
 }
 
 type scanner interface {

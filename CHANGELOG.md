@@ -10,6 +10,8 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 
 ### Added
 
+- `copendex detect` to report whether the current repository has Java source code or Java project markers.
+- Comma-separated kind filters such as `--kind class,interface` for search and symbols commands.
 - Makefile install and uninstall targets for putting `copendex` on `PATH`.
 - Tree-sitter-backed Java symbol extraction for constructors, nested types, interfaces, enums, enum constants, and overloaded methods.
 - SQLite index schema version metadata, exposed in stats JSON.

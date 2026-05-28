@@ -15,6 +15,7 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 - [ ] Add troubleshooting for `.gitignore`, config, SQLite, and rebuild behavior.
 - [ ] Document search matching and ranking semantics.
 - [ ] Add exact-match and result-limit search options.
+- [ ] Add `copendex search --expand` to return primary matches for requested filters first, then append related non-matching results when a kind or other filters are provided.
 
 ## Parser And Indexing
 

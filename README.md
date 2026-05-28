@@ -85,6 +85,13 @@ This creates:
 .copendex/config.yaml
 ```
 
+Detect whether the current repository looks like a Java repository or contains Java source:
+
+```sh
+copendex detect
+copendex detect --json
+```
+
 Index the repository:
 
 ```sh
@@ -106,6 +113,7 @@ Search symbols:
 copendex symbols Service
 copendex symbols Service --json
 copendex symbols Service --kind class --package com.example
+copendex symbols Repository --kind class,interface
 ```
 
 Search files and symbols:
@@ -114,6 +122,7 @@ Search files and symbols:
 copendex search AuthorizationService
 copendex search AuthorizationService --json
 copendex search AuthorizationService --language java --path src/main
+copendex search repository --kind class,interface
 ```
 
 Generate the local HTML UI:

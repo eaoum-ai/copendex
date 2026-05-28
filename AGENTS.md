@@ -22,7 +22,6 @@ Use this file as the first stop when working in this repository.
 - Search behavior: `internal/search/`
 - Output formatting: `internal/output/`
 - Static report UI: `internal/ui/`
-- Test fixtures: `testdata/`
 - Project scripts: `scripts/`
 
 ## Local Commands
