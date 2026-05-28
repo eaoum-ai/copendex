@@ -7,6 +7,7 @@ package cli
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,12 +55,63 @@ func TestIndexRebuildShorthand(t *testing.T) {
 	}
 }
 
+func TestDetectReportsJavaRepository(t *testing.T) {
+	root := t.TempDir()
+	chdir(t, root)
+	writeJavaFile(t, root)
+	if err := os.WriteFile(filepath.Join(root, "pom.xml"), []byte("<project></project>\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	out, err := runCommandOutput("detect")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, "Java repository: true") {
+		t.Fatalf("output = %q, want Java repository detection", out)
+	}
+	if !strings.Contains(out, "Contains Java source: true") {
+		t.Fatalf("output = %q, want Java source detection", out)
+	}
+}
+
+func TestDetectJSONReportsNonJavaRepository(t *testing.T) {
+	root := t.TempDir()
+	chdir(t, root)
+	if err := os.WriteFile(filepath.Join(root, "README.md"), []byte("# Example\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	out, err := runCommandOutput("detect", "--json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var result struct {
+		IsJavaRepository bool `json:"isJavaRepository"`
+		ContainsJavaCode bool `json:"containsJavaCode"`
+		JavaFileCount    int  `json:"javaFileCount"`
+	}
+	if err := json.Unmarshal([]byte(out), &result); err != nil {
+		t.Fatal(err)
+	}
+	if result.IsJavaRepository || result.ContainsJavaCode || result.JavaFileCount != 0 {
+		t.Fatalf("result = %#v, want non-Java repository", result)
+	}
+}
+
 func runCommand(args ...string) error {
+	_, err := runCommandOutput(args...)
+	return err
+}
+
+func runCommandOutput(args ...string) (string, error) {
 	cmd := NewRootCommand()
+	var out bytes.Buffer
 	cmd.SetArgs(args)
-	cmd.SetOut(&bytes.Buffer{})
+	cmd.SetOut(&out)
 	cmd.SetErr(&bytes.Buffer{})
-	return cmd.Execute()
+	err := cmd.Execute()
+	return out.String(), err
 }
 
 func writeJavaFile(t *testing.T, root string) {

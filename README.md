@@ -85,6 +85,13 @@ This creates:
 .copendex/config.yaml
 ```
 
+Detect whether the current repository looks like a Java repository or contains Java source:
+
+```sh
+copendex detect
+copendex detect --json
+```
+
 Index the repository:
 
 ```sh
