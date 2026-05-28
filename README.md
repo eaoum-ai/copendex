@@ -1,14 +1,14 @@
-# Copendex
+# Cosha
 
-Copendex is a local-first codebase intelligence tool for coding agents.
+Cosha, short for Code Shodha, is a local-first codebase intelligence tool for coding agents. Shodha means search.
 
 It runs on a developer's machine and exposes fast, structured codebase search and navigation data without using an LLM internally. The v0 foundation is a single-binary Go CLI backed by a local SQLite index.
 
 ## Why It Exists
 
-Coding agents need to find the right files, symbols, usages, tests, configs, entrypoints, and related code quickly while they work. Copendex focuses on deterministic codebase intelligence first: file discovery, ignore handling, language-aware indexing, symbol extraction, and JSON output that agents can consume directly.
+Coding agents need to find the right files, symbols, usages, tests, configs, entrypoints, and related code quickly while they work. Cosha focuses on deterministic codebase intelligence first: file discovery, ignore handling, language-aware indexing, symbol extraction, and JSON output that agents can consume directly.
 
-Copendex does not send source code to a cloud service. It does not use embeddings or an LLM internally.
+Cosha does not send source code to a cloud service. It does not use embeddings or an LLM internally.
 
 ## Current Scope
 
@@ -17,7 +17,7 @@ Copendex does not send source code to a cloud service. It does not use embedding
 - File discovery with default excludes and practical `.gitignore` support
 - Java indexing
 - Lightweight Java symbol extraction for packages, imports, classes, interfaces, enums, methods, and annotations
-- Local SQLite storage under `.copendex/index/copendex.db`
+- Local SQLite storage under `.cosha/index/cosha.db`
 - Deterministic file and symbol search
 - Text and JSON output
 - Basic tests and CI
@@ -44,7 +44,7 @@ make test
 Build the CLI:
 
 ```sh
-go build -o copendex ./cmd/copendex
+go build -o cosha ./cmd/cosha
 ```
 
 Or:
@@ -53,13 +53,13 @@ Or:
 make build
 ```
 
-Install the CLI so `copendex` is available from any directory:
+Install the CLI so `cosha` is available from any directory:
 
 ```sh
 make install
 ```
 
-By default this installs to `$(go env GOPATH)/bin/copendex`. Ensure that directory is on your `PATH`, or choose a different install directory:
+By default this installs to `$(go env GOPATH)/bin/cosha`. Ensure that directory is on your `PATH`, or choose a different install directory:
 
 ```sh
 make install BINDIR=/usr/local/bin
@@ -73,71 +73,71 @@ make uninstall
 
 ## CLI Usage
 
-Initialize Copendex in a repository:
+Initialize Cosha in a repository:
 
 ```sh
-copendex init
+cosha init
 ```
 
 This creates:
 
 ```text
-.copendex/config.yaml
+.cosha/config.yaml
 ```
 
 Detect whether the current repository looks like a Java repository or contains Java source:
 
 ```sh
-copendex detect
-copendex detect --json
+cosha detect
+cosha detect --json
 ```
 
 Index the repository:
 
 ```sh
-copendex index
-copendex index --rebuild
-copendex index -r
+cosha index
+cosha index --rebuild
+cosha index -r
 ```
 
 Show index stats:
 
 ```sh
-copendex stats
-copendex stats --json
+cosha stats
+cosha stats --json
 ```
 
 Search symbols:
 
 ```sh
-copendex symbols Service
-copendex symbols Service --json
-copendex symbols Service --kind class --package com.example
-copendex symbols Repository --kind class,interface
+cosha symbols Service
+cosha symbols Service --json
+cosha symbols Service --kind class --package com.example
+cosha symbols Repository --kind class,interface
 ```
 
 Search files and symbols:
 
 ```sh
-copendex search AuthorizationService
-copendex search AuthorizationService --json
-copendex search AuthorizationService --language java --path src/main
-copendex search repository --kind class,interface
+cosha search AuthorizationService
+cosha search AuthorizationService --json
+cosha search AuthorizationService --language java --path src/main
+cosha search repository --kind class,interface
 ```
 
 Generate the local HTML UI:
 
 ```sh
-copendex ui
+cosha ui
 ```
 
 Then open the generated file:
 
 ```text
-.copendex/ui/index.html
+.cosha/ui/index.html
 ```
 
-The UI is a static HTML snapshot with embedded index data from `copendex index`. It does not start a server.
+The UI is a static HTML snapshot with embedded index data from `cosha index`. It does not start a server.
 
 ## Default Config
 
@@ -150,7 +150,7 @@ exclude:
   - "build/**"
   - "target/**"
   - ".git/**"
-  - ".copendex/**"
+  - ".cosha/**"
   - "node_modules/**"
 index:
   languages:
@@ -180,6 +180,6 @@ output:
 
 ## License
 
-Copendex is licensed under the [Apache License 2.0](LICENSE).
+Cosha is licensed under the [Apache License 2.0](LICENSE).
 
-You may use, modify, distribute, and build commercial or proprietary products using Copendex, subject to the terms of the Apache License 2.0.
+You may use, modify, distribute, and build commercial or proprietary products using Cosha, subject to the terms of the Apache License 2.0.

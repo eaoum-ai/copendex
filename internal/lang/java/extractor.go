@@ -8,7 +8,7 @@ package java
 import (
 	"strings"
 
-	"github.com/eaoum-ai/copendex/internal/index"
+	"github.com/eaoum-ai/cosha/internal/index"
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
 	tree_sitter_java "github.com/tree-sitter/tree-sitter-java/bindings/go"
 )

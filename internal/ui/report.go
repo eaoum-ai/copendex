@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/eaoum-ai/copendex/internal/index"
+	"github.com/eaoum-ai/cosha/internal/index"
 )
 
 //go:embed static/index.html
@@ -24,7 +24,7 @@ type ReportData struct {
 }
 
 func DefaultReportPath(root string) string {
-	return filepath.Join(root, ".copendex", "ui", "index.html")
+	return filepath.Join(root, ".cosha", "ui", "index.html")
 }
 
 func WriteReport(store *index.Store, outPath string) error {
@@ -44,7 +44,7 @@ func WriteReport(store *index.Store, outPath string) error {
 	if err != nil {
 		return err
 	}
-	html := strings.Replace(string(template), "__COPENDEX_DATA__", string(data), 1)
+	html := strings.Replace(string(template), "__COSHA_DATA__", string(data), 1)
 	if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
 		return err
 	}

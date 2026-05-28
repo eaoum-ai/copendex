@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-// Command copendex starts the local-first codebase intelligence CLI.
+// Command cosha starts the local-first codebase intelligence CLI.
 package main
 
 import (
 	"os"
 
-	"github.com/eaoum-ai/copendex/internal/cli"
+	"github.com/eaoum-ai/cosha/internal/cli"
 )
 
 func main() {

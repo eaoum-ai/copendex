@@ -1,6 +1,6 @@
 # Development Strategy
 
-Copendex uses trunk-based development.
+Cosha uses trunk-based development.
 
 ## Principles
 

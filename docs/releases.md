@@ -1,6 +1,6 @@
 # Release and Version Management
 
-Copendex uses calendar versioning for public releases.
+Cosha uses calendar versioning for public releases.
 
 ## Version Format
 
@@ -26,30 +26,30 @@ The version number communicates release timing, not compatibility. Compatibility
 
 ## Compatibility Policy
 
-Copendex treats the local index as rebuildable state. An index schema change may require users to run:
+Cosha treats the local index as rebuildable state. An index schema change may require users to run:
 
 ```sh
-copendex index
+cosha index
 ```
 
 or a future explicit rebuild command.
 
-That policy only applies to local index data under `.copendex/index/`. It should not be used as a reason to break user-facing contracts casually.
+That policy only applies to local index data under `.cosha/index/`. It should not be used as a reason to break user-facing contracts casually.
 
 Higher-care compatibility surfaces include:
 
 - CLI command names, flags, and exit behavior.
 - JSON output fields consumed by agents.
-- `.copendex/config.yaml` shape and defaults.
+- `.cosha/config.yaml` shape and defaults.
 - Future MCP tools, resources, and response schemas.
 
 Breaking changes to those surfaces must be documented clearly in [CHANGELOG.md](../CHANGELOG.md), because the `YY.MM.N` version alone does not communicate compatibility.
 
 ## Next Phase: MCP Compatibility Layer
 
-Copendex should add an MCP server after the CLI foundation is stable.
+Cosha should add an MCP server after the CLI foundation is stable.
 
-The MCP server should provide a stable agent-facing contract over Copendex's local index and should handle compatibility concerns that are awkward for direct CLI/JSON consumers:
+The MCP server should provide a stable agent-facing contract over Cosha's local index and should handle compatibility concerns that are awkward for direct CLI/JSON consumers:
 
 - Expose versioned tool and response schemas.
 - Report index schema compatibility and required re-index actions.

@@ -1,8 +1,8 @@
-# Local Copendex state
-.copendex/
+# Local Cosha state
+.cosha/
 
 # Build outputs
-/copendex
+/cosha
 *.exe
 *.test
 *.out

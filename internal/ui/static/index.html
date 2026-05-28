@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Copendex</title>
+    <title>Cosha</title>
     <style>
       :root {
         color-scheme: light;
@@ -195,7 +195,7 @@
   </head>
   <body>
     <header>
-      <h1>Copendex</h1>
+      <h1>Cosha</h1>
       <div class="count" id="status"></div>
     </header>
     <main>
@@ -206,15 +206,15 @@
       </aside>
       <section>
         <div class="toolbar">
-          <strong>Dictions</strong>
+          <strong>Results</strong>
           <span class="count" id="resultCount"></span>
         </div>
         <div id="results"></div>
       </section>
     </main>
-    <script id="copendex-data" type="application/json">__COPENDEX_DATA__</script>
+    <script id="cosha-data" type="application/json">__COSHA_DATA__</script>
     <script>
-      const data = JSON.parse(document.querySelector("#copendex-data").textContent);
+      const data = JSON.parse(document.querySelector("#cosha-data").textContent);
       const query = document.querySelector("#query");
       const statusEl = document.querySelector("#status");
       const statsEl = document.querySelector("#stats");

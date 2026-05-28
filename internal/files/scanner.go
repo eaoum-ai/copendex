@@ -15,8 +15,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/eaoum-ai/copendex/internal/config"
-	"github.com/eaoum-ai/copendex/internal/index"
+	"github.com/eaoum-ai/cosha/internal/config"
+	"github.com/eaoum-ai/cosha/internal/index"
 )
 
 type Scanner struct {

@@ -36,14 +36,14 @@ make tidy
 make clean
 ```
 
-`make test`, `make build`, and `make tidy` keep Go caches under `.cache/`, which is ignored. The built CLI is `./copendex`, also ignored.
+`make test`, `make build`, and `make tidy` keep Go caches under `.cache/`, which is ignored. The built CLI is `./cosha`, also ignored.
 
 ## Generated Files
 
-Do not commit local Copendex runtime output:
+Do not commit local Cosha runtime output:
 
-- `.copendex/`
+- `.cosha/`
 - `.cache/`
-- `copendex`
+- `cosha`
 
-The static UI source lives at `internal/ui/static/index.html`; generated UI snapshots live under `.copendex/ui/`.
+The static UI source lives at `internal/ui/static/index.html`; generated UI snapshots live under `.cosha/ui/`.

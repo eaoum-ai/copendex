@@ -1,4 +1,4 @@
-module github.com/eaoum-ai/copendex
+module github.com/eaoum-ai/cosha
 
 go 1.26
 

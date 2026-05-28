@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-// Package config loads and writes per-repository Copendex configuration.
+// Package config loads and writes per-repository Cosha configuration.
 package config
 
 import (
@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	DirName        = ".copendex"
+	DirName        = ".cosha"
 	ConfigFileName = "config.yaml"
 )
 
@@ -43,7 +43,7 @@ func Default() Config {
 			"build/**",
 			"target/**",
 			".git/**",
-			".copendex/**",
+			".cosha/**",
 			"node_modules/**",
 		},
 		Index:  IndexConfig{Languages: []string{"java"}},
@@ -78,7 +78,7 @@ exclude:
   - "build/**"
   - "target/**"
   - ".git/**"
-  - ".copendex/**"
+  - ".cosha/**"
   - "node_modules/**"
 index:
   languages:

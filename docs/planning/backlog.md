@@ -6,7 +6,7 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 
 - [x] Add index schema version metadata to SQLite.
 - [x] Add clear errors for missing, stale, or incompatible indexes.
-- [x] Add `copendex index --rebuild` as an explicit rebuild command.
+- [x] Add `cosha index --rebuild` as an explicit rebuild command.
 - [x] Add richer query filters for symbols and search.
 - [x] Improve Java method extraction coverage.
 - [x] Add tests for nested classes, annotations, constructors, interfaces, enums, and enum constants.
@@ -15,7 +15,7 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 - [ ] Add troubleshooting for `.gitignore`, config, SQLite, and rebuild behavior.
 - [ ] Document search matching and ranking semantics.
 - [ ] Add exact-match and result-limit search options.
-- [ ] Add `copendex search --expand` to return primary matches for requested filters first, then append related non-matching results when a kind or other filters are provided.
+- [ ] Add `cosha search --expand` to return primary matches for requested filters first, then append related non-matching results when a kind or other filters are provided.
 
 ## Parser And Indexing
 

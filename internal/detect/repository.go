@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/eaoum-ai/copendex/internal/config"
-	"github.com/eaoum-ai/copendex/internal/files"
+	"github.com/eaoum-ai/cosha/internal/config"
+	"github.com/eaoum-ai/cosha/internal/files"
 )
 
 type Repository struct {
@@ -103,7 +103,7 @@ func javaProjectFiles(root string) ([]string, error) {
 
 func skippedMarkerDir(name string) bool {
 	switch name {
-	case ".git", ".copendex", ".cache", "build", "target", "node_modules":
+	case ".git", ".cosha", ".cache", "build", "target", "node_modules":
 		return true
 	default:
 		return false

@@ -1,10 +1,10 @@
 # Contributing
 
-Thanks for your interest in contributing to Copendex.
+Thanks for your interest in contributing to Cosha.
 
 ## Development
 
-Copendex uses trunk-based development. Create short-lived branches from `main`, keep pull requests small, follow the branch naming standard, and merge through the protected `main` branch after review and checks pass.
+Cosha uses trunk-based development. Create short-lived branches from `main`, keep pull requests small, follow the branch naming standard, and merge through the protected `main` branch after review and checks pass.
 
 See [docs/development.md](docs/development.md) for the full development strategy.
 
@@ -23,7 +23,7 @@ make build
 
 ## Guidelines
 
-- Keep Copendex local-first.
+- Keep Cosha local-first.
 - Do not add cloud, SaaS, LLM, or embedding dependencies to the core v0 CLI.
 - Prefer deterministic behavior and structured JSON output.
 - Keep dependencies small and cross-platform.
@@ -31,7 +31,7 @@ make build
 
 ## Developer Certificate of Origin
 
-Copendex uses the Developer Certificate of Origin (DCO) for contributions.
+Cosha uses the Developer Certificate of Origin (DCO) for contributions.
 
 By contributing to this project, you certify that you have the right to submit your contribution and that it can be licensed under the Apache License 2.0.
 

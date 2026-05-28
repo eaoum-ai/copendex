@@ -5,7 +5,7 @@
 // Package search exposes query operations over the local index store.
 package search
 
-import "github.com/eaoum-ai/copendex/internal/index"
+import "github.com/eaoum-ai/cosha/internal/index"
 
 type Service struct {
 	store *index.Store
