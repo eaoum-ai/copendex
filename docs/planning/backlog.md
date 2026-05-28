@@ -8,8 +8,8 @@ Backlog items are intentionally lightweight. Move items into [milestones.md](mil
 - [x] Add clear errors for missing, stale, or incompatible indexes.
 - [x] Add `copendex index --rebuild` as an explicit rebuild command.
 - [x] Add richer query filters for symbols and search.
-- [ ] Improve Java method extraction coverage.
-- [ ] Add tests for nested classes, annotations, constructors, interfaces, enums, and enum constants.
+- [x] Improve Java method extraction coverage.
+- [x] Add tests for nested classes, annotations, constructors, interfaces, enums, and enum constants.
 - [ ] Document JSON output contracts for `stats`, `symbols`, and `search`.
 - [ ] Add real Java repository smoke test checklist.
 - [ ] Add troubleshooting for `.gitignore`, config, SQLite, and rebuild behavior.
