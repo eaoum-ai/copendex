@@ -75,28 +75,50 @@ Real repository smoke tests prove Cosha works on full Java projects without comm
 
 Use [java-test-repositories.md](java-test-repositories.md) for the repository progression, practical query cases, benchmark commands, and report template.
 
-Near-term target command:
+Current command:
 
 ```sh
-COSHA_SMOKE_REPO=/path/to/java/repo make smoke
+make smoke
 ```
 
 Scope:
 
-- Validate `COSHA_SMOKE_REPO` exists and is outside this repository.
+- Clone the public Java test repository set over HTTPS into `.cache/test-repos/`.
+- Reset each test repository to its default branch HEAD.
 - Run `cosha detect`.
 - Run `cosha index --rebuild`.
 - Run `cosha stats --json`.
-- Run representative `cosha search` and `cosha symbols` commands.
-- Optionally generate the static UI.
+- Run representative `cosha search --json` and `cosha symbols --json` commands.
+- Validate JSON output.
 
 Rules:
 
-- `COSHA_SMOKE_REPO` must come from a gitignored local file or CI secret/config.
-- Do not print private paths or repository names in committed docs, PR summaries, or CI logs beyond generic labels.
-- Do not commit generated `.cosha/` output from the smoke repository.
-- Keep smoke tests optional in pull requests until a public fixture repository is chosen.
+- Smoke tests use public HTTPS clones only.
+- Do not commit cloned repositories, generated `.cosha/` output, or benchmark reports.
+- Keep full-repository smoke tests optional in pull requests because Spring Boot, Hadoop, ShardingSphere, and Elasticsearch are large.
 - Run smoke tests before MVP releases and before parser/indexing changes are merged when practical.
+
+### Real Repository Benchmarks
+
+Benchmarks run the same public repository set and write local reports under `.cache/benchmark-reports/`.
+
+Current command:
+
+```sh
+make benchmark
+```
+
+Scope:
+
+- Clone or update each public Java test repository.
+- Run the smoke checks first.
+- Benchmark `index --rebuild`, `detect`, `stats`, `stats --json`, representative `search`, and representative `symbols`.
+- Record repository commit SHAs in the generated reports.
+
+Rules:
+
+- Use `hyperfine` when available.
+- Keep benchmark reports local unless a maintainer intentionally copies sanitized results into release notes or planning docs.
 
 ### Cross-Platform Tests
 
@@ -136,6 +158,7 @@ Planned required checks:
 Optional or scheduled checks:
 
 - Real repository smoke test.
+- Real repository benchmark run.
 - Race detector where useful.
 - Coverage reporting.
 - Static analysis such as `go vet`.
@@ -147,6 +170,8 @@ Current:
 ```sh
 make test
 make integration
+make smoke
+make benchmark
 make build
 make check
 ```
@@ -154,7 +179,6 @@ make check
 Planned:
 
 ```sh
-make smoke
 make ci
 ```
 

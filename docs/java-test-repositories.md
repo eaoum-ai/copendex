@@ -4,17 +4,29 @@ Use this repository set to test Cosha's Java indexing, symbol extraction, search
 
 Integration tests clone public test repositories over HTTPS into `.cache/test-repos/`, which is ignored. Do not commit cloned repositories, local checkout paths, generated `.cosha/` output, or benchmark reports with machine-specific paths.
 
-For manual smoke and benchmark runs, configure paths in a gitignored file, such as `.env`:
+The standard public repository suite is:
 
 ```sh
-COSHA_REPO_SPRING_PETCLINIC=/path/to/spring-petclinic
-COSHA_REPO_SPRING_BOOT=/path/to/spring-boot
-COSHA_REPO_SPRING_FRAMEWORK=/path/to/spring-framework
-COSHA_REPO_KAFKA=/path/to/kafka
-COSHA_REPO_HADOOP=/path/to/hadoop
-COSHA_REPO_DUBBO=/path/to/dubbo
-COSHA_REPO_SHARDINGSPHERE=/path/to/shardingsphere
-COSHA_REPO_ELASTICSEARCH=/path/to/elasticsearch
+https://github.com/spring-projects/spring-petclinic.git
+https://github.com/spring-projects/spring-boot.git
+https://github.com/spring-projects/spring-framework.git
+https://github.com/apache/kafka.git
+https://github.com/apache/hadoop.git
+https://github.com/apache/dubbo.git
+https://github.com/apache/shardingsphere.git
+https://github.com/elastic/elasticsearch.git
+```
+
+Clone or update the full suite and run smoke checks:
+
+```sh
+make smoke
+```
+
+Run smoke checks and write benchmark reports under `.cache/benchmark-reports/`:
+
+```sh
+make benchmark
 ```
 
 ## Progression
@@ -45,7 +57,7 @@ Run this flow for every repository:
 ```sh
 cd "$REPO"
 cosha detect
-cosha index --rebuild
+cosha index
 cosha stats
 cosha stats --json
 cosha search <query>
@@ -98,6 +110,12 @@ For large repositories, reduce runs if the index command is expensive:
 
 ```sh
 hyperfine --warmup 1 --runs 1 'cosha index --rebuild'
+```
+
+The scripted benchmark path uses `hyperfine` when it is installed:
+
+```sh
+make benchmark
 ```
 
 Report these fields for each repository:
