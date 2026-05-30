@@ -2,7 +2,9 @@
 
 Use this repository set to test Cosha's Java indexing, symbol extraction, search, benchmarking, and Java/Spring-aware behavior across progressively larger codebases.
 
-Do not commit local checkout paths. Configure paths in a gitignored file, such as `.env`:
+Integration tests clone public test repositories over HTTPS into `.cache/test-repos/`, which is ignored. Do not commit cloned repositories, local checkout paths, generated `.cosha/` output, or benchmark reports with machine-specific paths.
+
+For manual smoke and benchmark runs, configure paths in a gitignored file, such as `.env`:
 
 ```sh
 COSHA_REPO_SPRING_PETCLINIC=/path/to/spring-petclinic
