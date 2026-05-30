@@ -8,6 +8,10 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 
 ## Unreleased
 
+### Changed
+
+- Restructure roadmap and planning docs around the agent-useful index sequence: incremental indexing, symbol detail, references and hierarchy, then MCP.
+
 ### Added
 
 - Rebrand the project and command to Cosha, short for Code Shodha.
