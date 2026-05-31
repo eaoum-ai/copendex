@@ -10,7 +10,9 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
+	"time"
 )
 
 func TestOpenWritesSchemaVersionMetadata(t *testing.T) {
@@ -24,8 +26,9 @@ func TestOpenWritesSchemaVersionMetadata(t *testing.T) {
 	if err := store.db.QueryRow("SELECT value FROM metadata WHERE key = 'schema_version'").Scan(&version); err != nil {
 		t.Fatal(err)
 	}
-	if version != "1" {
-		t.Fatalf("schema_version = %q, want 1", version)
+	want := strconv.Itoa(CurrentSchemaVersion)
+	if version != want {
+		t.Fatalf("schema_version = %q, want %q", version, want)
 	}
 }
 
@@ -86,6 +89,87 @@ func TestOpenExistingReportsIncompatibleIndex(t *testing.T) {
 
 	_, err = OpenExisting(root)
 	assertIndexError(t, err, IncompatibleIndex)
+}
+
+func TestRebuildPopulatesIndexedAt(t *testing.T) {
+	store, err := Open(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	before := time.Now().UTC()
+	files := []File{
+		{
+			Path:         "src/main/java/com/example/Service.java",
+			Language:     "java",
+			SizeBytes:    100,
+			LastModified: time.Now().UTC().Add(-time.Hour),
+			Hash:         "abc123",
+		},
+	}
+	if err := store.Rebuild(files, nil); err != nil {
+		t.Fatal(err)
+	}
+	after := time.Now().UTC()
+
+	results, err := store.SearchAll("Service")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var found *File
+	for _, r := range results {
+		if r.Type == "file" && r.File != nil {
+			f := r.File
+			found = f
+			break
+		}
+	}
+	if found == nil {
+		t.Fatal("no file result returned for path substring match")
+	}
+	if found.IndexedAt.IsZero() {
+		t.Fatal("IndexedAt is zero; expected Rebuild to populate it")
+	}
+	if found.IndexedAt.Before(before.Add(-time.Second)) || found.IndexedAt.After(after.Add(time.Second)) {
+		t.Fatalf("IndexedAt = %v, want between %v and %v", found.IndexedAt, before, after)
+	}
+}
+
+func TestRebuildAssignsSameIndexedAtToAllFiles(t *testing.T) {
+	store, err := Open(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	files := []File{
+		{Path: "a/Alpha.java", Language: "java", SizeBytes: 1, LastModified: time.Now().UTC(), Hash: "h1"},
+		{Path: "a/Beta.java", Language: "java", SizeBytes: 2, LastModified: time.Now().UTC(), Hash: "h2"},
+		{Path: "a/Gamma.java", Language: "java", SizeBytes: 3, LastModified: time.Now().UTC(), Hash: "h3"},
+	}
+	if err := store.Rebuild(files, nil); err != nil {
+		t.Fatal(err)
+	}
+
+	results, err := store.SearchAll(".java")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stamps []time.Time
+	for _, r := range results {
+		if r.Type == "file" && r.File != nil {
+			stamps = append(stamps, r.File.IndexedAt)
+		}
+	}
+	if len(stamps) != len(files) {
+		t.Fatalf("got %d file results, want %d", len(stamps), len(files))
+	}
+	for i := 1; i < len(stamps); i++ {
+		if !stamps[i].Equal(stamps[0]) {
+			t.Fatalf("IndexedAt values diverge within one Rebuild: %v vs %v", stamps[0], stamps[i])
+		}
+	}
 }
 
 func assertIndexError(t *testing.T, err error, kind IndexErrorKind) {

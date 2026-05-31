@@ -11,9 +11,11 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 ### Changed
 
 - Restructure roadmap and planning docs around the agent-useful index sequence: incremental indexing, symbol detail, references and hierarchy, then MCP.
+- Bump SQLite index schema to version 2. Existing local indexes surface `IncompatibleIndex` and must be rebuilt with `cosha index --rebuild`.
 
 ### Added
 
+- File fingerprint metadata: every indexed file row now carries an `indexed_at` timestamp recording when Cosha wrote the row, surfaced as `IndexedAt` on `index.File` and `indexedAt` in JSON output. Lays groundwork for changed-file detection. See `docs/decisions/0004-file-fingerprint-metadata.md`.
 - Automated testing strategy docs, compiled CLI integration tests, and public Java repository smoke/benchmark targets.
 - Rebrand the project and command to Cosha, short for Code Shodha.
 - `cosha detect` to report whether the current repository has Java source code or Java project markers.
