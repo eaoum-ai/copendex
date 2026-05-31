@@ -5,6 +5,8 @@ Cosha keeps lightweight project management in text files so planning stays revie
 ## Files
 
 - [../roadmap.md](../roadmap.md): high-level direction and non-goals.
+- [../testing.md](../testing.md): automated testing strategy.
+- [../java-test-repositories.md](../java-test-repositories.md): Java repository smoke and benchmark set.
 - [backlog.md](backlog.md): lightweight task inventory.
 - [milestones.md](milestones.md): release-oriented planning.
 - [../distribution](../distribution): package manager publishing notes.

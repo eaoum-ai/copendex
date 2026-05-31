@@ -14,6 +14,7 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 
 ### Added
 
+- Automated testing strategy docs, compiled CLI integration tests, and public Java repository smoke/benchmark targets.
 - Rebrand the project and command to Cosha, short for Code Shodha.
 - `cosha detect` to report whether the current repository has Java source code or Java project markers.
 - Comma-separated kind filters such as `--kind class,interface` for search and symbols commands.

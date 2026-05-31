@@ -30,6 +30,9 @@ Use the Makefile commands when possible:
 
 ```sh
 make test
+make integration
+make smoke
+make benchmark
 make build
 make check
 make tidy

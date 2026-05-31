@@ -1,0 +1,204 @@
+# Automated Testing Strategy
+
+Cosha should keep automated testing fast enough for every pull request while still proving the CLI works on realistic Java repositories before release.
+
+## Goals
+
+- Catch regressions in parser-backed Java indexing, search behavior, config handling, and index compatibility.
+- Keep pull request feedback short and deterministic.
+- Avoid committing private or large third-party repositories as fixtures.
+- Make release confidence explicit across supported operating systems.
+- Keep local and CI commands aligned so contributors can reproduce failures.
+
+## Test Layers
+
+### Unit Tests
+
+Unit tests cover package-level behavior with small in-test fixtures.
+
+Current command:
+
+```sh
+make test
+```
+
+Scope:
+
+- Config parsing and default config generation.
+- File scanning, include/exclude behavior, and `.gitignore` handling.
+- Java symbol extraction from focused source snippets.
+- SQLite schema migration, compatibility checks, and query behavior.
+- Search ranking and filtering.
+- Static UI report generation.
+- CLI command behavior using temporary directories.
+
+Rules:
+
+- Keep test fixtures inline or generated in temporary directories when practical.
+- Do not commit private repository snapshots.
+- Prefer table tests for parser and search cases.
+- Add regression tests for every indexing or query bug fixed.
+
+### Integration Tests
+
+Integration tests should exercise the compiled CLI as a user would.
+
+Current command:
+
+```sh
+make integration
+```
+
+Scope:
+
+- Build `cosha`.
+- Clone a public Java test repository over HTTPS into `.cache/test-repos/`.
+- Reset the test repository to the pinned commit used by the script.
+- Remove prior `.cosha/` output before each run.
+- Run `cosha init` in the cloned repository.
+- Run `cosha detect`, `cosha index`, `cosha stats`, `cosha search`, `cosha symbols`, and `cosha ui`.
+- Assert generated files live under `.cosha/`.
+- Assert JSON output is valid and contains expected fields.
+- Assert repeated indexing without `--rebuild` returns rebuild guidance.
+
+Rules:
+
+- Integration tests use HTTPS cloning only.
+- Integration tests may require network access when the local test repository cache is missing.
+- Integration tests must keep cloned repositories under ignored local paths such as `.cache/test-repos/`.
+- Integration tests must clean generated `.cosha/` output before each run.
+- Integration tests should run in normal pull request CI once they are reliable.
+
+### Real Repository Smoke Tests
+
+Real repository smoke tests prove Cosha works on full Java projects without committing those projects.
+
+Use [java-test-repositories.md](java-test-repositories.md) for the repository progression, practical query cases, benchmark commands, and report template.
+
+Current command:
+
+```sh
+make smoke
+```
+
+Scope:
+
+- Clone the public Java test repository set over HTTPS into `.cache/test-repos/`.
+- Reset each test repository to its default branch HEAD.
+- Run `cosha detect`.
+- Run `cosha index --rebuild`.
+- Run `cosha stats --json`.
+- Run representative `cosha search --json` and `cosha symbols --json` commands.
+- Validate JSON output.
+
+Rules:
+
+- Smoke tests use public HTTPS clones only.
+- Do not commit cloned repositories, generated `.cosha/` output, or benchmark reports.
+- Keep full-repository smoke tests optional in pull requests because Spring Boot, Hadoop, ShardingSphere, and Elasticsearch are large.
+- Run smoke tests before MVP releases and before parser/indexing changes are merged when practical.
+
+### Real Repository Benchmarks
+
+Benchmarks run the same public repository set and write local reports under `.cache/benchmark-reports/`.
+
+Current command:
+
+```sh
+make benchmark
+```
+
+Scope:
+
+- Clone or update each public Java test repository.
+- Run the smoke checks first.
+- Benchmark `index --rebuild`, `detect`, `stats`, `stats --json`, representative `search`, and representative `symbols`.
+- Record repository commit SHAs in the generated reports.
+
+Rules:
+
+- Use `hyperfine` when available.
+- Keep benchmark reports local unless a maintainer intentionally copies sanitized results into release notes or planning docs.
+
+### Cross-Platform Tests
+
+Cosha should test supported platforms before publishing binaries.
+
+Near-term target:
+
+- Linux PR CI remains required.
+- macOS and Windows CI become required before distribution begins.
+- Release workflows run build and smoke checks per release artifact.
+
+Scope:
+
+- `go test ./...`
+- `go build -o cosha ./cmd/cosha` or `go build -o cosha.exe ./cmd/cosha`
+- CLI smoke test with cloned public Java repositories.
+- Archive/package install smoke tests once release packaging exists.
+
+Notes:
+
+- Tree-sitter uses CGO, so release confidence should include native OS runners.
+- Cross-compilation should not replace native smoke tests until proven reliable.
+
+## CI Policy
+
+Required for every pull request:
+
+- DCO check.
+- `make check` on Linux.
+
+Planned required checks:
+
+- macOS test/build job.
+- Windows test/build job.
+- JSON contract check for `stats`, `search`, and `symbols`.
+
+Optional or scheduled checks:
+
+- Real repository smoke test.
+- Real repository benchmark run.
+- Race detector where useful.
+- Coverage reporting.
+- Static analysis such as `go vet`.
+
+## Local Commands
+
+Current:
+
+```sh
+make test
+make integration
+make smoke
+make benchmark
+make build
+make check
+```
+
+Planned:
+
+```sh
+make ci
+```
+
+`make ci` should eventually match required pull request checks.
+
+## Test Data Policy
+
+- Small examples may be generated inside tests.
+- Larger examples should use public repositories or local paths configured outside git.
+- Private repository names, paths, and source snippets must not be committed.
+- Generated indexes, UI snapshots, caches, and binaries remain ignored.
+
+## Release Readiness
+
+Before a release:
+
+- [ ] `make check` passes locally.
+- [ ] Required CI checks pass on the release branch or tag.
+- [ ] Integration tests pass.
+- [ ] Real Java repository smoke test passes.
+- [ ] `cosha detect`, `index`, `stats`, `search`, `symbols`, and `ui` are verified on a realistic Java repository.
+- [ ] macOS, Linux, and Windows release artifacts pass basic CLI smoke tests.
+- [ ] Changelog entries mention user-visible testing or compatibility changes.
