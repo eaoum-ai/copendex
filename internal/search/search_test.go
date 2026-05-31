@@ -48,7 +48,7 @@ func TestSearchSymbolsAndFiles(t *testing.T) {
 		t.Fatal(err)
 	}
 	service := New(store)
-	syms, err := service.Symbols("Service")
+	syms, err := service.Symbols("Authorization")
 	if err != nil {
 		t.Fatal(err)
 	}

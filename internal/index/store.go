@@ -24,7 +24,7 @@ type Store struct {
 	path string
 }
 
-const CurrentSchemaVersion = 1
+const CurrentSchemaVersion = 2
 
 type IndexErrorKind string
 
@@ -126,6 +126,42 @@ CREATE TABLE IF NOT EXISTS symbols (
 CREATE INDEX IF NOT EXISTS idx_files_path ON files(path);
 CREATE INDEX IF NOT EXISTS idx_symbols_name ON symbols(name);
 CREATE INDEX IF NOT EXISTS idx_symbols_file_id ON symbols(file_id);
+CREATE VIRTUAL TABLE IF NOT EXISTS symbols_fts USING fts5(
+	name, kind, package_name,
+	content='symbols',
+	content_rowid='id',
+	tokenize="unicode61 tokenchars '$_'"
+);
+CREATE VIRTUAL TABLE IF NOT EXISTS files_fts USING fts5(
+	path,
+	content='files',
+	content_rowid='id',
+	tokenize="unicode61 tokenchars '$_'"
+);
+CREATE TRIGGER IF NOT EXISTS symbols_ai AFTER INSERT ON symbols BEGIN
+	INSERT INTO symbols_fts(rowid, name, kind, package_name)
+	VALUES (new.id, new.name, new.kind, COALESCE(new.package_name, ''));
+END;
+CREATE TRIGGER IF NOT EXISTS symbols_ad AFTER DELETE ON symbols BEGIN
+	INSERT INTO symbols_fts(symbols_fts, rowid, name, kind, package_name)
+	VALUES ('delete', old.id, old.name, old.kind, COALESCE(old.package_name, ''));
+END;
+CREATE TRIGGER IF NOT EXISTS symbols_au AFTER UPDATE ON symbols BEGIN
+	INSERT INTO symbols_fts(symbols_fts, rowid, name, kind, package_name)
+	VALUES ('delete', old.id, old.name, old.kind, COALESCE(old.package_name, ''));
+	INSERT INTO symbols_fts(rowid, name, kind, package_name)
+	VALUES (new.id, new.name, new.kind, COALESCE(new.package_name, ''));
+END;
+CREATE TRIGGER IF NOT EXISTS files_ai AFTER INSERT ON files BEGIN
+	INSERT INTO files_fts(rowid, path) VALUES (new.id, new.path);
+END;
+CREATE TRIGGER IF NOT EXISTS files_ad AFTER DELETE ON files BEGIN
+	INSERT INTO files_fts(files_fts, rowid, path) VALUES ('delete', old.id, old.path);
+END;
+CREATE TRIGGER IF NOT EXISTS files_au AFTER UPDATE ON files BEGIN
+	INSERT INTO files_fts(files_fts, rowid, path) VALUES ('delete', old.id, old.path);
+	INSERT INTO files_fts(rowid, path) VALUES (new.id, new.path);
+END;
 `); err != nil {
 		return err
 	}
@@ -291,15 +327,32 @@ func (s *Store) SearchAllFiltered(query string, filters QueryFilters) ([]SearchR
 }
 
 func (s *Store) querySymbols(query string, filters QueryFilters) ([]Symbol, error) {
-	sqlQuery := `
+	matchExpr := ftsMatchExpr(query)
+	var sqlQuery string
+	var args []any
+	if matchExpr == "" {
+		sqlQuery = `
 SELECT symbols.id, symbols.file_id, symbols.name, symbols.kind, symbols.language, files.path, symbols.package_name, symbols.line, symbols.annotations_json
 FROM symbols
 JOIN files ON files.id = symbols.file_id
-WHERE lower(symbols.name) LIKE '%' || lower(?) || '%'
+WHERE 1=1
 `
-	args := []any{query}
+	} else {
+		sqlQuery = `
+SELECT symbols.id, symbols.file_id, symbols.name, symbols.kind, symbols.language, files.path, symbols.package_name, symbols.line, symbols.annotations_json
+FROM symbols_fts
+JOIN symbols ON symbols.id = symbols_fts.rowid
+JOIN files ON files.id = symbols.file_id
+WHERE symbols_fts MATCH ?
+`
+		args = append(args, matchExpr)
+	}
 	sqlQuery, args = appendFilters(sqlQuery, args, filters, true)
-	sqlQuery += " ORDER BY symbols.name, files.path"
+	if matchExpr == "" {
+		sqlQuery += " ORDER BY symbols.name, files.path"
+	} else {
+		sqlQuery += " ORDER BY symbols_fts.rank, symbols.name, files.path"
+	}
 	rows, err := s.db.Query(sqlQuery, args...)
 	if err != nil {
 		return nil, err
@@ -323,11 +376,40 @@ WHERE lower(symbols.name) LIKE '%' || lower(?) || '%'
 }
 
 func (s *Store) queryFiles(query string, filters QueryFilters) (*sql.Rows, error) {
-	sqlQuery := `SELECT id, path, language, size_bytes, modified_at, hash FROM files WHERE lower(path) LIKE '%' || lower(?) || '%'`
-	args := []any{query}
+	matchExpr := ftsMatchExpr(query)
+	var sqlQuery string
+	var args []any
+	if matchExpr == "" {
+		sqlQuery = `
+SELECT files.id, files.path, files.language, files.size_bytes, files.modified_at, files.hash
+FROM files
+WHERE 1=1
+`
+	} else {
+		sqlQuery = `
+SELECT files.id, files.path, files.language, files.size_bytes, files.modified_at, files.hash
+FROM files_fts
+JOIN files ON files.id = files_fts.rowid
+WHERE files_fts MATCH ?
+`
+		args = append(args, matchExpr)
+	}
 	sqlQuery, args = appendFilters(sqlQuery, args, filters, false)
-	sqlQuery += " ORDER BY path"
+	if matchExpr == "" {
+		sqlQuery += " ORDER BY files.path"
+	} else {
+		sqlQuery += " ORDER BY files_fts.rank, files.path"
+	}
 	return s.db.Query(sqlQuery, args...)
+}
+
+func ftsMatchExpr(raw string) string {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return ""
+	}
+	escaped := strings.ReplaceAll(raw, `"`, `""`)
+	return `"` + escaped + `"` + "*"
 }
 
 func appendFilters(sqlQuery string, args []any, filters QueryFilters, symbols bool) (string, []any) {

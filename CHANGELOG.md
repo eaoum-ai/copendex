@@ -11,10 +11,10 @@ Changes stay under `Unreleased` until a release is cut. At release time, entries
 ### Changed
 
 - Restructure roadmap and planning docs around the agent-useful index sequence: incremental indexing, symbol detail, references and hierarchy, then MCP.
+- Rewrite symbol and file search to use SQLite FTS5 virtual tables backed by triggers on the canonical tables. Token and prefix queries on large Java repositories drop from full-table-scan latency to single-digit milliseconds. Bumps SQLite index schema to version 2; existing local indexes surface `IncompatibleIndex` and must be rebuilt with `cosha index --rebuild`. See `docs/decisions/0005-use-sqlite-fts5-for-search.md`.
+- Search semantics shift from substring-anywhere (the old `LIKE '%q%'` behavior) to token-prefix matching. Queries against the start of an identifier work natively (`cosha search Owner` finds `OwnerController` and `OwnerRepository`); queries that target the middle of an identifier (`cosha search Service` against `AuthorizationService`) no longer match. CamelCase-fuzzy matching is deferred to a later slice.
 
 ### Added
-
-- Automated testing strategy docs, compiled CLI integration tests, and public Java repository smoke/benchmark targets.
 - Rebrand the project and command to Cosha, short for Code Shodha.
 - `cosha detect` to report whether the current repository has Java source code or Java project markers.
 - Comma-separated kind filters such as `--kind class,interface` for search and symbols commands.
