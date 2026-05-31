@@ -14,6 +14,7 @@ type File struct {
 	SizeBytes    int64     `json:"sizeBytes"`
 	LastModified time.Time `json:"lastModified"`
 	Hash         string    `json:"hash"`
+	IndexedAt    time.Time `json:"indexedAt"`
 }
 
 type Symbol struct {

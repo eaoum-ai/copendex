@@ -24,7 +24,7 @@ type Store struct {
 	path string
 }
 
-const CurrentSchemaVersion = 1
+const CurrentSchemaVersion = 2
 
 type IndexErrorKind string
 
@@ -110,7 +110,8 @@ CREATE TABLE IF NOT EXISTS files (
 	language TEXT NOT NULL,
 	size_bytes INTEGER NOT NULL,
 	modified_at TEXT NOT NULL,
-	hash TEXT NOT NULL
+	hash TEXT NOT NULL,
+	indexed_at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS symbols (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,7 +150,7 @@ func (s *Store) Rebuild(files []File, symbolsByPath map[string][]Symbol) error {
 	if _, err := tx.Exec("DELETE FROM files"); err != nil {
 		return err
 	}
-	fileStmt, err := tx.Prepare("INSERT INTO files(path, language, size_bytes, modified_at, hash) VALUES (?, ?, ?, ?, ?)")
+	fileStmt, err := tx.Prepare("INSERT INTO files(path, language, size_bytes, modified_at, hash, indexed_at) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -159,8 +160,9 @@ func (s *Store) Rebuild(files []File, symbolsByPath map[string][]Symbol) error {
 		return err
 	}
 	defer symbolStmt.Close()
+	indexedAt := time.Now().UTC().Format(time.RFC3339Nano)
 	for _, file := range files {
-		res, err := fileStmt.Exec(file.Path, file.Language, file.SizeBytes, file.LastModified.UTC().Format(time.RFC3339Nano), file.Hash)
+		res, err := fileStmt.Exec(file.Path, file.Language, file.SizeBytes, file.LastModified.UTC().Format(time.RFC3339Nano), file.Hash, indexedAt)
 		if err != nil {
 			return err
 		}
@@ -323,7 +325,7 @@ WHERE lower(symbols.name) LIKE '%' || lower(?) || '%'
 }
 
 func (s *Store) queryFiles(query string, filters QueryFilters) (*sql.Rows, error) {
-	sqlQuery := `SELECT id, path, language, size_bytes, modified_at, hash FROM files WHERE lower(path) LIKE '%' || lower(?) || '%'`
+	sqlQuery := `SELECT id, path, language, size_bytes, modified_at, hash, indexed_at FROM files WHERE lower(path) LIKE '%' || lower(?) || '%'`
 	args := []any{query}
 	sqlQuery, args = appendFilters(sqlQuery, args, filters, false)
 	sqlQuery += " ORDER BY path"
@@ -388,7 +390,8 @@ type scanner interface {
 func scanFile(row scanner) (File, error) {
 	var file File
 	var modified string
-	if err := row.Scan(&file.ID, &file.Path, &file.Language, &file.SizeBytes, &modified, &file.Hash); err != nil {
+	var indexed string
+	if err := row.Scan(&file.ID, &file.Path, &file.Language, &file.SizeBytes, &modified, &file.Hash, &indexed); err != nil {
 		return file, err
 	}
 	t, err := time.Parse(time.RFC3339Nano, modified)
@@ -396,5 +399,10 @@ func scanFile(row scanner) (File, error) {
 		return file, err
 	}
 	file.LastModified = t
+	indexedTime, err := time.Parse(time.RFC3339Nano, indexed)
+	if err != nil {
+		return file, err
+	}
+	file.IndexedAt = indexedTime
 	return file, nil
 }
