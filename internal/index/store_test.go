@@ -10,6 +10,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 )
 
@@ -24,8 +25,9 @@ func TestOpenWritesSchemaVersionMetadata(t *testing.T) {
 	if err := store.db.QueryRow("SELECT value FROM metadata WHERE key = 'schema_version'").Scan(&version); err != nil {
 		t.Fatal(err)
 	}
-	if version != "1" {
-		t.Fatalf("schema_version = %q, want 1", version)
+	want := strconv.Itoa(CurrentSchemaVersion)
+	if version != want {
+		t.Fatalf("schema_version = %q, want %q", version, want)
 	}
 }
 
